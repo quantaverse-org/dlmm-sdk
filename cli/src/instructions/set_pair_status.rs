@@ -1,7 +1,8 @@
 use std::ops::Deref;
 
-use anchor_client::solana_client::rpc_config::RpcSendTransactionConfig;
-use anchor_client::{solana_sdk::pubkey::Pubkey, solana_sdk::signer::Signer, Program};
+use anchor_client::RpcSendTransactionConfig;
+use anchor_client::{Program, Signer};
+use anchor_lang::prelude::Pubkey;
 
 use anchor_lang::solana_program::instruction::Instruction;
 use anchor_lang::{InstructionData, ToAccountMetas};

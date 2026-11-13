@@ -46,13 +46,13 @@ impl BinArrayBitmapExtExtension for BinArrayBitmapExtension {
             }
         } else if swap_for_y {
             match self.iter_bitmap(start_index, min_bitmap_id)? {
-                Some(value) => return Ok((value, true)),
-                None => return Err(anyhow!("Cannot find non-zero liquidity bin array id")),
+                Some(value) => Ok((value, true)),
+                None => Err(anyhow!("Cannot find non-zero liquidity bin array id")),
             }
         } else {
             match self.iter_bitmap(start_index, -BIN_ARRAY_BITMAP_SIZE - 1)? {
-                Some(value) => return Ok((value, true)),
-                None => return Ok((-BIN_ARRAY_BITMAP_SIZE, false)),
+                Some(value) => Ok((value, true)),
+                None => Ok((-BIN_ARRAY_BITMAP_SIZE, false)),
             }
         }
     }

@@ -88,7 +88,7 @@ pub async fn execute_claim_fee<C: Deref<Target = impl Signer> + Clone>(
         user_token_y,
         event_authority,
         program: dlmm::ID,
-        memo_program: spl_memo::id(),
+        memo_program: spl_memo_interface::v3::id(),
     }
     .to_account_metas(None);
 

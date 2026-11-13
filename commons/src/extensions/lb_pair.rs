@@ -1,8 +1,8 @@
 use crate::*;
+use anchor_lang::prelude::Pubkey;
 use anchor_spl::token::spl_token;
 use anchor_spl::token_2022::spl_token_2022;
 use ruint::aliases::U1024;
-use solana_sdk::pubkey::Pubkey;
 use std::ops::Deref;
 use std::ops::Shl;
 use std::ops::Shr;
@@ -262,8 +262,7 @@ impl LbPairExtension for LbPair {
     }
 
     fn is_support_limit_order(&self) -> bool {
-        let Some(function_type) = FunctionType::try_from(self.parameters.function_type).ok()
-        else {
+        let Some(function_type) = FunctionType::try_from(self.parameters.function_type).ok() else {
             return false;
         };
         match function_type {

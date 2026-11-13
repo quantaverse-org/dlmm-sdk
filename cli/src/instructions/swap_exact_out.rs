@@ -102,7 +102,7 @@ pub async fn execute_swap_exact_out<C: Deref<Target = impl Signer> + Clone>(
         host_fee_in: Some(dlmm::ID),
         event_authority,
         program: dlmm::ID,
-        memo_program: spl_memo::ID,
+        memo_program: spl_memo_interface::v3::ID,
     }
     .to_account_metas(None);
 

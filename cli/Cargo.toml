@@ -14,18 +14,23 @@ authors = ["tian <tian@racoons.dev>"]
 commons = { workspace = true }
 anchor-lang = { workspace = true }
 anchor-spl = { workspace = true }
-anchor-client = { workspace = true, features = ["async"] }
+anchor-client = { workspace = true }
 clap = { workspace = true, features = ["derive"] }
 anyhow = { workspace = true }
 shellexpand = { workspace = true }
 rust_decimal = { workspace = true, features = ["maths"] }
-spl-associated-token-account = { workspace = true }
 rand = { workspace = true }
 tokio = { workspace = true, features = ["full", "parking_lot"] }
 bincode = { workspace = true }
-spl-memo = { workspace = true, features = ["no-entrypoint"] }
+spl-memo-interface = { workspace = true }
 spl-transfer-hook-interface = { workspace = true }
-solana-account-decoder = { workspace = true }
+solana-account = { workspace = true }
+solana-clock = { workspace = true }
+solana-compute-budget-interface = { workspace = true }
+solana-keypair = { workspace = true }
+solana-rpc-client = { workspace = true }
+solana-rpc-client-api = { workspace = true }
+solana-sdk-ids = { workspace = true }
 num-integer = { workspace = true }
 bytemuck = { workspace = true }
 futures-util = { workspace = true }

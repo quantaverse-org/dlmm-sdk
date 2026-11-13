@@ -55,7 +55,7 @@ pub async fn execute_claim_reward<C: Deref<Target = impl Signer> + Clone>(
         lb_pair,
         reward_vault,
         reward_mint,
-        memo_program: spl_memo::ID,
+        memo_program: spl_memo_interface::v3::ID,
         token_program: reward_mint_program,
         position,
         user_token_account,

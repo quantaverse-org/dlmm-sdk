@@ -1,6 +1,6 @@
 use crate::*;
+use anchor_lang::prelude::{AccountMeta, Pubkey};
 use num_integer::Integer;
-use solana_sdk::{instruction::AccountMeta, pubkey::Pubkey};
 
 pub trait BinArrayExtension {
     fn is_bin_id_within_range(&self, bin_id: i32) -> Result<bool>;

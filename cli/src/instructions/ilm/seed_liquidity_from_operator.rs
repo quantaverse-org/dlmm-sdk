@@ -7,8 +7,8 @@ use anchor_spl::{
     token_interface::{spl_token_2022::instruction::transfer_checked, Mint, TokenAccount},
 };
 
+use anchor_spl::associated_token::spl_associated_token_account::instruction::create_associated_token_account_idempotent;
 use futures_util::future::try_join_all;
-use spl_associated_token_account::instruction::create_associated_token_account_idempotent;
 
 pub fn to_wei_amount(amount: u64, decimal: u8) -> Result<u64> {
     let wei_amount = amount
@@ -196,7 +196,7 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
         .get_multiple_accounts(&[
             lb_pair_state.token_x_mint,
             lb_pair_state.token_y_mint,
-            solana_sdk::sysvar::clock::ID,
+            solana_sdk_ids::sysvar::clock::ID,
             bitmap_extension,
         ])
         .await?;
@@ -383,8 +383,8 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
             lb_pair,
             bin_array_bitmap_extension: bitmap_extension,
             funder: seeder,
-            system_program: solana_sdk::system_program::ID,
-            rent: solana_sdk::sysvar::rent::ID,
+            system_program: system_program::ID,
+            rent: solana_sdk_ids::sysvar::rent::ID,
         }
         .to_account_metas(None);
 
@@ -439,7 +439,7 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
                 operator: seeder,
                 operator_token_x: seeder_token_x,
                 owner_token_x,
-                system_program: solana_sdk::system_program::ID,
+                system_program: system_program::ID,
                 event_authority,
                 program: dlmm::ID,
             }
@@ -471,7 +471,7 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
                     bin_array,
                     lb_pair,
                     funder: seeder,
-                    system_program: solana_sdk::system_program::ID,
+                    system_program: system_program::ID,
                 }
                 .to_account_metas(None);
 
@@ -681,7 +681,11 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
                 builder = builder.instruction(ix);
             }
 
-            futures.push(builder.send_with_spinner_and_config(transaction_config));
+            futures.push(async move {
+                builder
+                    .send_with_spinner_and_config(transaction_config)
+                    .await
+            });
         }
 
         let result = try_join_all(futures).await;
@@ -700,7 +704,11 @@ pub async fn execute_seed_liquidity_by_operator<C: Deref<Target = impl Signer> +
                 builder = builder.instruction(ix);
             }
 
-            futures.push(builder.send_with_spinner_and_config(transaction_config));
+            futures.push(async move {
+                builder
+                    .send_with_spinner_and_config(transaction_config)
+                    .await
+            });
         }
 
         let result = try_join_all(futures).await;

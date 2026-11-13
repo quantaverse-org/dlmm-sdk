@@ -1,6 +1,7 @@
 use crate::*;
 use commons::dlmm::accounts::BinArray;
-use solana_sdk::signature::Keypair;
+use solana_account::Account;
+use solana_keypair::Keypair;
 use std::rc::Rc;
 
 const FIXTURE_FOLDER: &str = "9t3EyC9FweyL7PBWvKz3mrXg8B9fwFc9SK3QxM4ENqhd";
@@ -89,7 +90,7 @@ fn setup_swap_quote_test_pair() -> (ProgramTest, SwapQuoteTestPair) {
         mint_data[4..36].copy_from_slice(mint_authority.pubkey().as_ref());
         test.add_account(
             mint_pubkey,
-            solana_sdk::account::Account {
+            Account {
                 lamports: 10 * LAMPORTS_PER_SOL,
                 data: mint_data,
                 owner: spl_token::id(),

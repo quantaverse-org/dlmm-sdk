@@ -36,7 +36,7 @@ pub async fn execute_add_liquidity<C: Deref<Target = impl Signer> + Clone>(
     } = params;
 
     // Sort by bin id
-    bin_liquidity_distribution.sort_by(|a, b| a.0.cmp(&b.0));
+    bin_liquidity_distribution.sort_by_key(|entry| entry.0);
 
     let rpc_client = program.rpc();
 

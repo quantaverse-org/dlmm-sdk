@@ -25,7 +25,7 @@ pub async fn execute_initialize_bin_array<C: Deref<Target = impl Signer> + Clone
         bin_array,
         funder: program.payer(),
         lb_pair,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
     }
     .to_account_metas(None);
 

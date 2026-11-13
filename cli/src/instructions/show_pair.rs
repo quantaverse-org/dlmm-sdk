@@ -3,9 +3,9 @@ use anchor_lang::AccountDeserialize;
 use anchor_spl::token_interface::Mint;
 use rust_decimal::prelude::*;
 use rust_decimal::Decimal;
-use solana_client::{
-    rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
-    rpc_filter::{Memcmp, RpcFilterType},
+use solana_rpc_client_api::{
+    config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
+    filter::{Memcmp, RpcFilterType},
 };
 
 fn fee_rate_to_fee_pct(fee_rate: u128) -> Option<Decimal> {
@@ -52,7 +52,7 @@ pub async fn execute_show_pair<C: Deref<Target = impl Signer> + Clone>(
         })
         .collect();
 
-    bin_arrays.sort_by(|a, b| a.1.index.cmp(&b.1.index));
+    bin_arrays.sort_by_key(|(_, bin_array)| bin_array.index);
 
     println!("{:#?}", lb_pair_state);
 

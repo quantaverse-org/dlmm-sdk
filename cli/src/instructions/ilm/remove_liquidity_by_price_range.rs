@@ -147,7 +147,7 @@ pub async fn execute_remove_liquidity_by_price_range<C: Deref<Target = impl Sign
                 sender: program.payer(),
                 token_x_program,
                 token_y_program,
-                memo_program: spl_memo::ID,
+                memo_program: spl_memo_interface::v3::ID,
                 event_authority,
                 program: dlmm::ID,
             }
@@ -181,7 +181,7 @@ pub async fn execute_remove_liquidity_by_price_range<C: Deref<Target = impl Sign
                 token_y_mint: lb_pair_state.token_y_mint,
                 token_program_x: token_x_program,
                 token_program_y: token_y_program,
-                memo_program: spl_memo::ID,
+                memo_program: spl_memo_interface::v3::ID,
                 event_authority,
                 program: dlmm::ID,
                 user_token_x,

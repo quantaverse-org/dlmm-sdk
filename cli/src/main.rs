@@ -1,15 +1,6 @@
-use anchor_client::solana_sdk::compute_budget::ComputeBudgetInstruction;
-use anchor_client::solana_sdk::instruction::Instruction;
 use anchor_client::*;
-use anchor_client::{
-    solana_client::rpc_config::RpcSendTransactionConfig,
-    solana_sdk::pubkey::Pubkey,
-    solana_sdk::{
-        commitment_config::CommitmentConfig,
-        signer::{keypair::*, Signer},
-    },
-};
-use anchor_lang::prelude::AccountMeta;
+use anchor_lang::prelude::{AccountMeta, Pubkey};
+use anchor_lang::system_program;
 use anchor_lang::AccountDeserialize;
 use anchor_lang::InstructionData;
 use anchor_lang::ToAccountMetas;
@@ -19,7 +10,9 @@ use commons::*;
 use dlmm::accounts::*;
 use dlmm::types::*;
 use instructions::set_pair_status_permissionless::execute_set_pair_status_permissionless;
-use solana_account_decoder::*;
+use solana_compute_budget_interface::ComputeBudgetInstruction;
+use solana_keypair::read_keypair_file;
+use solana_rpc_client_api::config::{UiAccountEncoding, UiDataSliceConfig};
 use std::ops::Deref;
 use std::rc::Rc;
 use std::time::Duration;
@@ -63,7 +56,7 @@ async fn main() -> Result<()> {
 
     let client = Client::new_with_options(
         cli.config_override.cluster,
-        Rc::new(Keypair::from_bytes(&payer.to_bytes())?),
+        Rc::new(payer),
         commitment_config,
     );
 

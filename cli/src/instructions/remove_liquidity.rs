@@ -26,7 +26,7 @@ pub async fn execute_remove_liquidity<C: Deref<Target = impl Signer> + Clone>(
         mut bin_liquidity_removal,
     } = params;
 
-    bin_liquidity_removal.sort_by(|a, b| a.0.cmp(&b.0));
+    bin_liquidity_removal.sort_by_key(|entry| entry.0);
 
     let rpc_client = program.rpc();
 
@@ -113,7 +113,7 @@ pub async fn execute_remove_liquidity<C: Deref<Target = impl Signer> + Clone>(
         token_y_mint: lb_pair_state.token_y_mint,
         token_y_program,
         sender: program.payer(),
-        memo_program: spl_memo::ID,
+        memo_program: spl_memo_interface::v3::ID,
         event_authority,
         program: dlmm::ID,
     }

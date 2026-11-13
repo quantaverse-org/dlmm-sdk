@@ -1,6 +1,6 @@
 use super::seeds::*;
 use crate::*;
-use anchor_client::solana_sdk::pubkey::Pubkey;
+use anchor_lang::prelude::Pubkey;
 use std::{cmp::max, cmp::min};
 
 pub fn derive_lb_pair_with_preset_parameter_key(

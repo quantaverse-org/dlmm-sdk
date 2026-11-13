@@ -111,7 +111,7 @@ pub async fn execute_initialize_permission_lb_pair<C: Deref<Target = impl Signer
         token_badge_y,
         token_program_x: token_mint_base_account.owner,
         token_program_y: token_mint_quote_account.owner,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
         event_authority,
         program: dlmm::ID,
     }

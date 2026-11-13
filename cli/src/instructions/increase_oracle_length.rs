@@ -1,5 +1,4 @@
 use crate::*;
-use anchor_client::solana_sdk;
 
 #[derive(Debug, Parser)]
 pub struct IncreaseOracleLengthParams {
@@ -23,7 +22,7 @@ pub async fn execute_increase_oracle_length<C: Deref<Target = impl Signer> + Clo
     let accounts = dlmm::client::accounts::IncreaseOracleLength {
         funder: program.payer(),
         oracle,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
         event_authority,
         program: dlmm::ID,
     }

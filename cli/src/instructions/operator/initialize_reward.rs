@@ -47,7 +47,7 @@ pub async fn execute_initialize_reward<C: Deref<Target = impl Signer> + Clone>(
         signer: program.payer(),
         payer: program.payer(),
         token_program: reward_mint_account.owner,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
         event_authority,
         program: dlmm::ID,
     }

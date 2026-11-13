@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use crate::*;
 use commons::dlmm::accounts::{BinArray, LimitOrder};
 use commons::extensions::limit_order::{LimitOrderExtension, ParsedLimitOrder};
-use solana_client::rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig};
+use solana_rpc_client_api::config::{RpcAccountInfoConfig, RpcProgramAccountsConfig};
 
 #[derive(Debug, Parser)]
 pub struct GetLimitOrdersParams {

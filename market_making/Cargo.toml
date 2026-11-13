@@ -11,7 +11,7 @@ tokio = { workspace = true, features = ["full"] }
 hyper = { workspace = true, features = ["full"] }
 routerify = { workspace = true }
 ureq = { workspace = true, features = ["json"] }
-anchor-client = { workspace = true, features = ["async"] }
+anchor-client = { workspace = true }
 anchor-spl = { workspace = true }
 anchor-lang = { workspace = true }
 env_logger = { workspace = true }
@@ -21,13 +21,15 @@ shellexpand = { workspace = true }
 anyhow = { workspace = true }
 serde_json = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
-spl-associated-token-account = { workspace = true }
-solana-transaction-status = { workspace = true }
+solana-compute-budget-interface = { workspace = true }
+solana-keypair = { workspace = true }
+solana-rpc-client = { workspace = true }
+solana-rpc-client-api = { workspace = true }
+solana-signature = { workspace = true }
 bs58 = { workspace = true }
 chrono = { workspace = true }
 commons = { workspace = true }
-solana-account-decoder = { workspace = true }
 itertools = { workspace = true }
 rust_decimal = { workspace = true, features = ["maths"] }
-spl-memo = { workspace = true, features = ["no-entrypoint"] }
+spl-memo-interface = { workspace = true }
 bytemuck = { workspace = true }

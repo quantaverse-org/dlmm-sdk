@@ -1,5 +1,4 @@
 use crate::*;
-use solana_sdk::system_program;
 
 #[derive(Debug, Parser)]
 pub struct InitializeTokenBadgeParams {

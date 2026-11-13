@@ -1,6 +1,5 @@
-use anchor_client::solana_client::rpc_filter::{Memcmp, RpcFilterType};
-use anchor_lang::Discriminator;
-use solana_sdk::pubkey::Pubkey;
+use anchor_lang::prelude::{Discriminator, Pubkey};
+use solana_rpc_client_api::filter::{Memcmp, RpcFilterType};
 
 use crate::dlmm::accounts::LimitOrder;
 
@@ -16,10 +15,7 @@ pub fn position_filter_by_wallet_and_pair(wallet: Pubkey, pair: Pubkey) -> Vec<R
     vec![position_pair_filter, position_owner_filter]
 }
 
-pub fn limit_order_filter_by_owner_and_pair(
-    owner: Pubkey,
-    pair: Pubkey,
-) -> Vec<RpcFilterType> {
+pub fn limit_order_filter_by_owner_and_pair(owner: Pubkey, pair: Pubkey) -> Vec<RpcFilterType> {
     let discriminator_filter =
         RpcFilterType::Memcmp(Memcmp::new_base58_encoded(0, LimitOrder::DISCRIMINATOR));
 

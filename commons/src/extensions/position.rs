@@ -1,5 +1,5 @@
 use crate::*;
-use solana_sdk::{instruction::AccountMeta, pubkey::Pubkey};
+use anchor_lang::prelude::{AccountMeta, Pubkey};
 
 pub trait PositionExtension {
     fn get_bin_array_indexes_bound(&self) -> Result<(i32, i32)>;

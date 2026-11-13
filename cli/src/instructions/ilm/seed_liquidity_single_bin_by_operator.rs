@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
 use anchor_lang::{prelude::Clock, AccountDeserialize};
+use anchor_spl::associated_token::spl_associated_token_account::instruction::create_associated_token_account_idempotent;
 use anchor_spl::{
     associated_token::get_associated_token_address_with_program_id,
     token::spl_token::instruction::transfer_checked,
     token_interface::{Mint, TokenAccount},
 };
-use spl_associated_token_account::instruction::create_associated_token_account_idempotent;
 
 use crate::*;
 
@@ -110,7 +110,7 @@ pub async fn execute_seed_liquidity_single_bin_by_operator<
             lb_pair_state.token_y_mint,
             owner_token_x,
             bin_array_bitmap_extension,
-            solana_sdk::sysvar::clock::ID,
+            solana_sdk_ids::sysvar::clock::ID,
         ])
         .await?;
 
@@ -176,8 +176,8 @@ pub async fn execute_seed_liquidity_single_bin_by_operator<
             lb_pair,
             bin_array_bitmap_extension,
             funder: program.payer(),
-            system_program: solana_sdk::system_program::ID,
-            rent: solana_sdk::sysvar::rent::ID,
+            system_program: system_program::ID,
+            rent: solana_sdk_ids::sysvar::rent::ID,
         }
         .to_account_metas(None);
 
@@ -198,7 +198,7 @@ pub async fn execute_seed_liquidity_single_bin_by_operator<
         lb_pair,
         bin_array: bin_array_accounts_meta[0].pubkey,
         funder: program.payer(),
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
     }
     .to_account_metas(None);
 
@@ -253,7 +253,7 @@ pub async fn execute_seed_liquidity_single_bin_by_operator<
         operator: program.payer(),
         payer: program.payer(),
         position,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
         event_authority,
         operator_token_x,
         owner_token_x,

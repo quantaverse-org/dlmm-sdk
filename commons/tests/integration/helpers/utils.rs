@@ -1,18 +1,22 @@
-use anchor_lang::AccountDeserialize;
-use anchor_spl::associated_token::*;
+use anchor_lang::{
+    solana_program::{instruction::Instruction, pubkey::Pubkey, system_instruction::transfer},
+    AccountDeserialize,
+};
+use anchor_spl::associated_token::{
+    get_associated_token_address, get_associated_token_address_with_program_id,
+    spl_associated_token_account::instruction::create_associated_token_account as create_ata,
+};
 use anchor_spl::token::spl_token;
 use anchor_spl::token_interface::TokenAccount;
 use assert_matches::assert_matches;
 use commons::dlmm::accounts::{BinArray, LbPair};
-use solana_program::clock::Clock;
+use solana_account::Account;
+use solana_clock::Clock;
+use solana_keypair::Keypair;
 use solana_program_test::BanksClient;
-use solana_sdk::{
-    account::Account,
-    instruction::Instruction,
-    pubkey::Pubkey,
-    signature::{Keypair, Signer},
-    transaction::Transaction,
-};
+use solana_sdk_ids::sysvar::clock;
+use solana_signer::Signer;
+use solana_transaction::Transaction;
 use std::collections::HashMap;
 pub async fn process_and_assert_ok(
     instructions: &[Instruction],
@@ -76,14 +80,12 @@ pub async fn create_associated_token_account(
     banks_client: &mut BanksClient,
 ) {
     println!("{}", program_id);
-    let ins = vec![
-        spl_associated_token_account::instruction::create_associated_token_account(
-            &payer.pubkey(),
-            authority,
-            token_mint,
-            program_id,
-        ),
-    ];
+    let ins = [create_ata(
+        &payer.pubkey(),
+        authority,
+        token_mint,
+        program_id,
+    )];
 
     process_and_assert_ok(&ins, payer, &[payer], banks_client).await;
 }
@@ -94,21 +96,16 @@ pub async fn warp_sol(
     amount: u64,
     banks_client: &mut BanksClient,
 ) {
-    let wsol_ata = spl_associated_token_account::get_associated_token_address(
-        &wallet,
+    let wsol_ata = get_associated_token_address(&wallet, &spl_token::native_mint::id());
+
+    let create_wsol_ata_ix = create_ata(
+        &payer.pubkey(),
+        &payer.pubkey(),
         &spl_token::native_mint::id(),
+        &spl_token::id(),
     );
 
-    let create_wsol_ata_ix =
-        spl_associated_token_account::instruction::create_associated_token_account(
-            &payer.pubkey(),
-            &payer.pubkey(),
-            &spl_token::native_mint::id(),
-            &spl_token::id(),
-        );
-
-    let transfer_sol_ix =
-        solana_program::system_instruction::transfer(&payer.pubkey(), &wsol_ata, amount);
+    let transfer_sol_ix = transfer(&payer.pubkey(), &wsol_ata, amount);
 
     let sync_native_ix = spl_token::instruction::sync_native(&spl_token::id(), &wsol_ata).unwrap();
 
@@ -143,11 +140,7 @@ pub async fn mint_spl_tokens(
 }
 
 pub async fn get_clock(banks_client: &mut BanksClient) -> Clock {
-    let clock_account = banks_client
-        .get_account(solana_program::sysvar::clock::id())
-        .await
-        .unwrap()
-        .unwrap();
+    let clock_account = banks_client.get_account(clock::ID).await.unwrap().unwrap();
 
     let clock_state = bincode::deserialize::<Clock>(clock_account.data.as_ref()).unwrap();
 

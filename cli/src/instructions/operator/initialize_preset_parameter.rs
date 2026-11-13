@@ -1,8 +1,8 @@
 use anchor_lang::Discriminator;
 use commons::dlmm::{accounts::PresetParameter2, types::InitPresetParametersIx};
-use solana_client::{
-    rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
-    rpc_filter::{Memcmp, RpcFilterType},
+use solana_rpc_client_api::{
+    config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
+    filter::{Memcmp, RpcFilterType},
 };
 
 use crate::*;
@@ -82,7 +82,7 @@ pub async fn execute_initialize_preset_parameter<C: Deref<Target = impl Signer> 
         operator,
         signer: program.payer(),
         payer: program.payer(),
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
     }
     .to_account_metas(None);
 

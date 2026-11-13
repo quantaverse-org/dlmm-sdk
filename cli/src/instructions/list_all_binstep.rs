@@ -1,7 +1,7 @@
 use anchor_lang::Discriminator;
-use solana_client::{
-    rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
-    rpc_filter::{Memcmp, RpcFilterType},
+use solana_rpc_client_api::{
+    config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
+    filter::{Memcmp, RpcFilterType},
 };
 
 use crate::*;
@@ -63,21 +63,20 @@ pub async fn execute_list_all_bin_step<C: Deref<Target = impl Signer> + Clone>(
                 let mut disc = [0u8; 8];
                 disc.copy_from_slice(&account.data[..8]);
 
-                let (bin_step, base_factor, base_fee_power_factor) = if disc
-                    == PresetParameter::DISCRIMINATOR
-                {
-                    let state = PresetParameter::try_deserialize(&mut account.data.as_ref())?;
-                    (state.bin_step, state.base_factor, 0)
-                } else if disc == PresetParameter2::DISCRIMINATOR {
-                    let state: PresetParameter2 = pod_read_unaligned_skip_disc(&account.data)?;
-                    (
-                        state.bin_step,
-                        state.base_factor,
-                        state.base_fee_power_factor,
-                    )
-                } else {
-                    continue;
-                };
+                let (bin_step, base_factor, base_fee_power_factor) =
+                    if disc == PresetParameter::DISCRIMINATOR {
+                        let state = PresetParameter::try_deserialize(&mut account.data.as_ref())?;
+                        (state.bin_step, state.base_factor, 0)
+                    } else if disc == PresetParameter2::DISCRIMINATOR {
+                        let state: PresetParameter2 = pod_read_unaligned_skip_disc(&account.data)?;
+                        (
+                            state.bin_step,
+                            state.base_factor,
+                            state.base_fee_power_factor,
+                        )
+                    } else {
+                        continue;
+                    };
 
                 let base_fee = (u128::from(bin_step)
                     * u128::from(base_factor).pow(base_fee_power_factor.into())

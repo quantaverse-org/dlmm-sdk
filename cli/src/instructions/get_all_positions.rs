@@ -2,7 +2,7 @@ use std::collections::{BTreeSet, HashMap};
 
 use crate::*;
 use commons::extensions::dynamic_position::DynamicPosition;
-use solana_client::rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig};
+use solana_rpc_client_api::config::{RpcAccountInfoConfig, RpcProgramAccountsConfig};
 
 #[derive(Debug, Parser)]
 pub struct GetAllPositionsParams {
@@ -63,7 +63,7 @@ pub async fn execute_get_all_positions<C: Deref<Target = impl Signer> + Clone>(
         .collect();
 
     let accounts_to_fetch: Vec<Pubkey> = [
-        vec![lb_pair, solana_sdk::sysvar::clock::ID],
+        vec![lb_pair, solana_sdk_ids::sysvar::clock::ID],
         bin_array_pubkeys,
     ]
     .concat();
@@ -82,8 +82,7 @@ pub async fn execute_get_all_positions<C: Deref<Target = impl Signer> + Clone>(
     let clock_account = fetched[1]
         .as_ref()
         .context("Failed to fetch clock account")?;
-    let clock: solana_sdk::sysvar::clock::Clock =
-        bincode::deserialize(clock_account.data.as_ref())?;
+    let clock: solana_clock::Clock = bincode::deserialize(clock_account.data.as_ref())?;
 
     let mut bin_array_map: HashMap<i32, BinArray> = HashMap::new();
     for (i, &idx) in all_bin_array_indexes.iter().enumerate() {

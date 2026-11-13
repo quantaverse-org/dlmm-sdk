@@ -9,12 +9,10 @@ use crate::pair_config::*;
 use crate::state::*;
 use crate::utils::*;
 
-use anchor_client::solana_client::nonblocking::rpc_client::*;
-use anchor_client::solana_sdk::pubkey::*;
-use anchor_client::solana_sdk::signature::*;
-use anchor_client::solana_sdk::*;
-use anchor_client::*;
-use solana_account_decoder::*;
+use anchor_client::{Cluster, Signer};
+use anchor_lang::prelude::Pubkey;
+use solana_keypair::{read_keypair_file, Keypair};
+use solana_rpc_client::nonblocking::rpc_client::RpcClient;
 
 use anyhow::*;
 use commons::dlmm::accounts::*;
@@ -26,7 +24,6 @@ use commons::rpc_client_extension::*;
 use commons::*;
 
 use serde::*;
-use solana_client::rpc_config::*;
 
 use clap::Parser;
 use core::Core;

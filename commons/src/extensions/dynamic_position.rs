@@ -1,5 +1,5 @@
 use crate::*;
-use solana_sdk::pubkey::Pubkey;
+use anchor_lang::prelude::Pubkey;
 use std::collections::HashMap;
 
 use super::bin_array::BinArrayExtension;

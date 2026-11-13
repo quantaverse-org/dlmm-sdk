@@ -73,7 +73,7 @@ pub async fn execute_cancel_limit_order<C: Deref<Target = impl Signer> + Clone>(
         owner: program.payer(),
         token_x_program,
         token_y_program,
-        memo_program: spl_memo::ID,
+        memo_program: spl_memo_interface::v3::ID,
         event_authority,
         program: dlmm::ID,
     }

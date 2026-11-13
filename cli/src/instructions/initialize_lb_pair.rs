@@ -86,10 +86,10 @@ pub async fn execute_initialize_lb_pair<C: Deref<Target = impl Signer> + Clone>(
         funder: program.payer(),
         token_program: token_mint_base_account.owner,
         preset_parameter,
-        system_program: solana_sdk::system_program::ID,
+        system_program: system_program::ID,
         event_authority,
         program: dlmm::ID,
-        rent: solana_sdk::sysvar::rent::ID,
+        rent: solana_sdk_ids::sysvar::rent::ID,
     }
     .to_account_metas(None);
 

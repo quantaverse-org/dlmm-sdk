@@ -74,7 +74,6 @@ ignore = [
     #{ id = "RUSTSEC-0000-0000", reason = "you can specify a reason the advisory is ignored" },
     #"a-crate-that-is-yanked@0.1.1", # you can also ignore yanked crate versions if you wish
     #{ crate = "a-crate-that-is-yanked@0.1.1", reason = "you can specify why you are ignoring the yanked crate" },
-    { id = "RUSTSEC-2021-0139", reason = "ansi_term is unmaintained, no fix. Dev only, pulled in by litesvm for the commons tests" },
     { id = "RUSTSEC-2024-0375", reason = "atty is unmaintained, no fix. Pulled in by env_logger 0.9, which market_making uses and solana-logger 2.2 depends on" },
     { id = "RUSTSEC-2025-0141", reason = "bincode is unmaintained, no fix. Pulled in by anchor-lang. cli and commons also use it directly, to decode the Clock sysvar" },
     { id = "RUSTSEC-2026-0247", reason = "bitmaps is unmaintained, no fix. Dev only, pulled in by solana-program-test > solana-runtime > im for the commons tests" },
@@ -144,8 +143,8 @@ exceptions = [
     { allow = ["MPL-2.0"], crate = "option-ext" },
     # pulled in by solana-client 2.2 through quinn-proto > rustls-platform-verifier
     { allow = ["CDLA-Permissive-2.0"], crate = "webpki-root-certs" },
-    # pulled in by solana-client 2.2 through reqwest 0.11 and tungstenite 0.20, and by market_making's ureq 2
-    { allow = ["MPL-2.0"], crate = "webpki-roots" },
+    # Agave's RPC client uses the CDLA-licensed roots. market_making's ureq 2 uses the MPL-licensed roots.
+    { allow = ["MPL-2.0", "CDLA-Permissive-2.0"], crate = "webpki-roots" },
 ]
 
 # Some crates don't have (easily) machine readable licensing information,

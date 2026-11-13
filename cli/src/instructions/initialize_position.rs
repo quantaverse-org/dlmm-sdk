@@ -1,3 +1,4 @@
+use solana_keypair::Keypair;
 use std::sync::Arc;
 
 use crate::*;
@@ -33,8 +34,8 @@ pub async fn execute_initialize_position<C: Deref<Target = impl Signer> + Clone>
         payer: program.payer(),
         position: position_keypair.pubkey(),
         owner: program.payer(),
-        rent: solana_sdk::sysvar::rent::ID,
-        system_program: solana_sdk::system_program::ID,
+        rent: solana_sdk_ids::sysvar::rent::ID,
+        system_program: system_program::ID,
         event_authority,
         program: dlmm::ID,
     }

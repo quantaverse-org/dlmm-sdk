@@ -1,19 +1,18 @@
 use std::collections::HashMap;
 
 use crate::*;
-use anchor_client::solana_client::rpc_client::RpcClient as BlockingRpcClient;
-use anchor_client::{
-    solana_client::nonblocking::rpc_client::RpcClient, solana_sdk::account::Account,
-};
+use anchor_lang::solana_program::program_pack::Pack;
+use anchor_spl::associated_token::spl_associated_token_account::instruction::create_associated_token_account_idempotent;
 use anchor_spl::{
     associated_token::get_associated_token_address_with_program_id,
     token::spl_token,
     token_2022::spl_token_2022::extension::{transfer_hook, StateWithExtensions},
 };
 use num_integer::Integer;
-use solana_sdk::program_pack::Pack;
-use solana_sdk::sysvar::clock::Clock;
-use spl_associated_token_account::instruction::create_associated_token_account_idempotent;
+use solana_account::Account;
+use solana_clock::Clock;
+use solana_rpc_client::nonblocking::rpc_client::RpcClient;
+use solana_rpc_client::rpc_client::RpcClient as BlockingRpcClient;
 use spl_transfer_hook_interface::offchain::add_extra_account_metas_for_execute;
 
 pub fn position_bin_range_chunks(lower_bin_id: i32, upper_bin_id: i32) -> Vec<(i32, i32)> {
@@ -166,7 +165,7 @@ pub async fn fetch_quote_required_accounts(
 ) -> Result<SwapQuoteAccounts> {
     let prerequisite_accounts = [
         lb_pair,
-        solana_sdk::sysvar::clock::ID,
+        solana_sdk_ids::sysvar::clock::ID,
         lb_pair_state.token_x_mint,
         lb_pair_state.token_y_mint,
     ];

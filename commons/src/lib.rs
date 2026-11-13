@@ -1,4 +1,4 @@
-use anchor_lang::prelude::declare_program;
+use anchor_lang::prelude::{anchor_lang, declare_program};
 use anyhow::*;
 use bytemuck::AnyBitPattern;
 

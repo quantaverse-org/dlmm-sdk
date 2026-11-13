@@ -1,13 +1,19 @@
 use crate::MarketMakingMode;
 use crate::*;
+use anchor_lang::solana_program::{
+    instruction::{AccountMeta, Instruction},
+    rent, system_program,
+};
 use anchor_spl::associated_token::get_associated_token_address_with_program_id;
 use anchor_spl::token_interface::Mint;
 use anchor_spl::token_interface::TokenAccount;
-use compute_budget::ComputeBudgetInstruction;
 use dlmm::events::Swap as SwapEvent;
-use instruction::AccountMeta;
-use instruction::Instruction;
 use itertools::Itertools;
+use solana_compute_budget_interface::ComputeBudgetInstruction;
+use solana_rpc_client_api::config::{
+    RpcAccountInfoConfig, RpcProgramAccountsConfig, UiAccountEncoding,
+};
+use spl_memo_interface::v3::ID as MEMO_PROGRAM_ID;
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::Arc;
@@ -70,8 +76,7 @@ impl Core {
 
             if !position_key_with_state.is_empty() {
                 // sort position by bin id
-                position_key_with_state
-                    .sort_by(|(_, a), (_, b)| a.lower_bin_id.cmp(&b.lower_bin_id));
+                position_key_with_state.sort_by_key(|(_, state)| state.lower_bin_id);
 
                 min_bin_id = position_key_with_state
                     .first()
@@ -149,7 +154,7 @@ impl Core {
         let state = self.state.lock().unwrap();
         let mut token_mints_with_program = vec![];
 
-        for (_, position) in state.all_positions.iter() {
+        for position in state.all_positions.values() {
             let lb_pair = &position.lb_pair_state.context("Missing lb pair state")?;
             let [token_x_program, token_y_program] = lb_pair.get_token_programs()?;
             token_mints_with_program.push((lb_pair.token_x_mint, token_x_program));
@@ -250,7 +255,7 @@ impl Core {
                 sender: payer.pubkey(),
                 token_x_program,
                 token_y_program,
-                memo_program: spl_memo::ID,
+                memo_program: MEMO_PROGRAM_ID,
                 event_authority,
                 program: dlmm_ID,
             }
@@ -292,7 +297,7 @@ impl Core {
                 token_y_mint: lb_pair_state.token_y_mint,
                 token_program_x: token_x_program,
                 token_program_y: token_y_program,
-                memo_program: spl_memo::ID,
+                memo_program: MEMO_PROGRAM_ID,
                 user_token_x,
                 user_token_y,
             }
@@ -458,7 +463,7 @@ impl Core {
             host_fee_in: Some(dlmm_ID),
             event_authority,
             program: dlmm_ID,
-            memo_program: spl_memo::ID,
+            memo_program: MEMO_PROGRAM_ID,
         }
         .to_account_metas(None);
 
@@ -560,7 +565,7 @@ impl Core {
             payer: payer.pubkey(),
             position,
             owner: payer.pubkey(),
-            rent: sysvar::rent::ID,
+            rent: rent::ID,
             system_program: system_program::ID,
             event_authority,
             program: dlmm_ID,
